@@ -1,0 +1,40 @@
+// api语法版本
+syntax = "v1"
+
+info(
+	author: "zhangzexin"
+	date:   "2022-04-19"
+	desc:   "api语法示例及语法说明"
+)
+
+type (
+	UserInfoReq {
+		UserId   int64  `json:"userId"`
+		UserName string `json:"userName"`
+		Password string `json:"password"`
+	}
+	UserInfoResp {
+		UserId      int64  `json:"userId"`
+		Nickname    string `json:"nickname"`
+		AccessToken string `json:"accessToken"`
+	}
+)
+
+@server(
+	jwt: JwtAuth
+	group: user
+)
+service user-api{
+	@doc "获取用户信息"
+	@handler userInfo
+	post /user/info (UserInfoReq) returns (UserInfoResp)
+}
+
+@server(
+	group: user
+)
+service user-api{
+	@doc "用户登录"
+	@handler userLogin
+	post /user/login (UserInfoReq) returns (UserInfoResp)
+}
