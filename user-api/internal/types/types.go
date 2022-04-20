@@ -3,8 +3,8 @@ package types
 
 type UserInfoReq struct {
 	UserId   int64  `json:"userId"`
-	UserName string `json:"userName"`
-	Password string `json:"password"`
+	UserName string `json:"userName,optional"`
+	Password string `json:"password,optional"`
 }
 
 type UserInfoResp struct {

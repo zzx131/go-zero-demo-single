@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"github.com/golang-jwt/jwt/v4"
+	"time"
 
 	"go-zero-demo-single/user-api/internal/svc"
 	"go-zero-demo-single/user-api/internal/types"
@@ -27,7 +28,9 @@ func NewUserLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLog
 func (l *UserLoginLogic) UserLogin(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
 	// 申请JWT token
 	l.Logger.Infof("登录入参是：", *req)
-	accessToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, 10, 1000, 10)
+	accessToken, err := l.buildToken(l.svcCtx.Config.JwtAuth.AccessSecret, map[string]interface{}{
+		"key": "value",
+	}, 60*5)
 	return &types.UserInfoResp{
 		UserId:      10,
 		Nickname:    "zhangsan",
@@ -35,14 +38,16 @@ func (l *UserLoginLogic) UserLogin(req *types.UserInfoReq) (resp *types.UserInfo
 	}, err
 }
 
-// getJwtToken 获取JWT token
-func (l *UserLoginLogic) getJwtToken(secretKey string, iat, seconds, userId int64) (string, error) {
+func (l *UserLoginLogic) buildToken(secretKey string, payloads map[string]interface{}, seconds int64) (string, error) {
+	now := time.Now().Unix()
 	claims := make(jwt.MapClaims)
-
-	claims["exp"] = iat + seconds
-	claims["iat"] = iat
-	claims["userId"] = userId
+	claims["exp"] = now + seconds
+	claims["iat"] = now
+	for k, v := range payloads {
+		claims[k] = v
+	}
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
+
 	return token.SignedString([]byte(secretKey))
 }
