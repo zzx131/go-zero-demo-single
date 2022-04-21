@@ -7,6 +7,7 @@ import (
 	"go-zero-demo-single/user-api/internal/logic/user"
 	"go-zero-demo-single/user-api/internal/svc"
 	"go-zero-demo-single/user-api/internal/types"
+	"go-zero-demo-single/user-api/response"
 )
 
 func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -19,10 +20,7 @@ func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		l := user.NewUserInfoLogic(r.Context(), svcCtx)
 		resp, err := l.UserInfo(&req)
-		if err != nil {
-			httpx.Error(w, err)
-		} else {
-			httpx.OkJson(w, resp)
-		}
+
+		response.Response(w, resp, err)
 	}
 }

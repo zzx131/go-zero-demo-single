@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"errors"
+	"go-zero-demo-single/user-api/model"
 
 	"go-zero-demo-single/user-api/internal/svc"
 	"go-zero-demo-single/user-api/internal/types"
@@ -24,8 +26,14 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 }
 
 func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, 1)
+	if err != nil && err != model.ErrNotFound {
+		return nil, errors.New("查询数据失效！")
+	}
+	if user == nil {
+		return nil, errors.New("用户不存在！")
+	}
 	return &types.UserInfoResp{
-		UserId:   req.UserId,
-		Nickname: "zhangsan",
+		UserId: user.Id,
 	}, nil
 }

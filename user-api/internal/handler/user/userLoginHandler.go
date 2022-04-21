@@ -7,6 +7,7 @@ import (
 	"go-zero-demo-single/user-api/internal/logic/user"
 	"go-zero-demo-single/user-api/internal/svc"
 	"go-zero-demo-single/user-api/internal/types"
+	"go-zero-demo-single/user-api/response"
 )
 
 func UserLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -19,10 +20,7 @@ func UserLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		l := user.NewUserLoginLogic(r.Context(), svcCtx)
 		resp, err := l.UserLogin(&req)
-		if err != nil {
-			httpx.Error(w, err)
-		} else {
-			httpx.OkJson(w, resp)
-		}
+
+		response.Response(w, resp, err)
 	}
 }

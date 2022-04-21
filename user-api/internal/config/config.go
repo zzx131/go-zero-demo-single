@@ -7,4 +7,7 @@ type Config struct {
 	JwtAuth struct {
 		AccessSecret string
 	}
+	DB struct {
+		DataSource string
+	}
 }
