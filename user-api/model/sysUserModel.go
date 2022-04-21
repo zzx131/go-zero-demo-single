@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -36,16 +37,16 @@ type (
 	}
 
 	SysUser struct {
-		Id        int64          `db:"id"`
-		Username  string         `db:"username"` // 用户名
-		RealName  string         `db:"real_name"`
-		Password  string         `db:"password"`
-		OrgName   sql.NullString `db:"org_name"` // 组织名称
-		OrgId     sql.NullInt64  `db:"org_id"`
-		LockFlag  sql.NullInt64  `db:"lock_flag"`
-		CreatedAt sql.NullTime   `db:"created_at"`
-		UpdatedAt sql.NullTime   `db:"updated_at"`
-		DeletedAt sql.NullTime   `db:"deleted_at"`
+		Id        int64        `db:"id"`
+		Username  string       `db:"username"` // 用户名
+		RealName  string       `db:"real_name"`
+		Password  string       `db:"password"`
+		OrgName   string       `db:"org_name"` // 组织名称
+		OrgId     int64        `db:"org_id"`
+		LockFlag  int64        `db:"lock_flag"`
+		CreatedAt time.Time    `db:"created_at"`
+		UpdatedAt sql.NullTime `db:"updated_at"`
+		DeletedAt sql.NullTime `db:"deleted_at"`
 	}
 )
 
