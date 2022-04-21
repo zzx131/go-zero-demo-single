@@ -34,7 +34,7 @@ type (
 
 	SysUser struct {
 		Id        int64          `db:"id"`
-		Username  sql.NullString `db:"username"` // 用户名
+		Username  string         `db:"username"` // 用户名
 		RealName  sql.NullString `db:"real_name"`
 		Password  sql.NullString `db:"password"`
 		OrgName   sql.NullString `db:"org_name"` // 组织名称

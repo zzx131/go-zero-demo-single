@@ -34,6 +34,7 @@ func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoRe
 		return nil, errors.New("用户不存在！")
 	}
 	return &types.UserInfoResp{
-		UserId: user.Id,
+		UserId:   user.Id,
+		Nickname: user.Username,
 	}, nil
 }

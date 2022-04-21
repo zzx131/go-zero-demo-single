@@ -25,13 +25,13 @@ func NewUserLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLog
 	}
 }
 
-func (l *UserLoginLogic) UserLogin(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
+func (l *UserLoginLogic) UserLogin(req *types.UserLoginReq) (resp *types.UserLoginResp, err error) {
 	// 申请JWT token
-	l.Logger.Infof("登录入参是：", *req)
+	l.Logger.Infof("登录入参是：", req)
 	accessToken, err := l.buildToken(l.svcCtx.Config.JwtAuth.AccessSecret, map[string]interface{}{
 		"key": "value",
 	}, 60*5)
-	return &types.UserInfoResp{
+	return &types.UserLoginResp{
 		UserId:      10,
 		Nickname:    "zhangsan",
 		AccessToken: accessToken,

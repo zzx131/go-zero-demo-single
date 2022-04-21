@@ -8,15 +8,24 @@ info(
 )
 
 type (
-	UserInfoReq {
-		UserId   int64  `json:"userId"`
-		UserName string `json:"userName,optional"`
-		Password string `json:"password,optional"`
+	// 登录接口入参和返回参数
+	UserLoginReq {
+		UserName string `json:"userName"`
+		Password string `json:"password"`
 	}
-	UserInfoResp {
+	UserLoginResp {
 		UserId      int64  `json:"userId"`
 		Nickname    string `json:"nickname"`
 		AccessToken string `json:"accessToken"`
+	}
+	// 用户信息参数
+	UserInfoReq {
+		UserId   int64  `json:"userId"`
+		UserName string `json:"userName,optional"`
+	}
+	UserInfoResp {
+		UserId   int64  `json:"userId"`
+		Nickname string `json:"nickname"`
 	}
 )
 
@@ -36,5 +45,5 @@ service user-api{
 service user-api{
 	@doc "用户登录"
 	@handler userLogin
-	post /user/login (UserInfoReq) returns (UserInfoResp)
+	post /user/login (UserLoginReq) returns (UserLoginResp)
 }
