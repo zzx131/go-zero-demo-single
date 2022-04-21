@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
+	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/core/stringx"
@@ -17,6 +18,8 @@ var (
 	sysUserRows                = strings.Join(sysUserFieldNames, ",")
 	sysUserRowsExpectAutoSet   = strings.Join(stringx.Remove(sysUserFieldNames, "`id`", "`create_time`", "`update_time`"), ",")
 	sysUserRowsWithPlaceHolder = strings.Join(stringx.Remove(sysUserFieldNames, "`id`", "`create_time`", "`update_time`"), "=?,") + "=?"
+
+	cacheTpfKnowledgeSysUserIdPrefix = "cache:tpfKnowledge:sysUser:id:"
 )
 
 type (
@@ -28,7 +31,7 @@ type (
 	}
 
 	defaultSysUserModel struct {
-		conn  sqlx.SqlConn
+		sqlc.CachedConn
 		table string
 	}
 
@@ -46,23 +49,27 @@ type (
 	}
 )
 
-func NewSysUserModel(conn sqlx.SqlConn) SysUserModel {
+func NewSysUserModel(conn sqlx.SqlConn, c cache.CacheConf) SysUserModel {
 	return &defaultSysUserModel{
-		conn:  conn,
-		table: "`sys_user`",
+		CachedConn: sqlc.NewConn(conn, c),
+		table:      "`sys_user`",
 	}
 }
 
 func (m *defaultSysUserModel) Insert(ctx context.Context, data *SysUser) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, sysUserRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Username, data.RealName, data.Password, data.OrgName, data.OrgId, data.LockFlag, data.CreatedAt, data.UpdatedAt, data.DeletedAt)
+	ret, err := m.ExecNoCacheCtx(ctx, query, data.Username, data.RealName, data.Password, data.OrgName, data.OrgId, data.LockFlag, data.CreatedAt, data.UpdatedAt, data.DeletedAt)
+
 	return ret, err
 }
 
 func (m *defaultSysUserModel) FindOne(ctx context.Context, id int64) (*SysUser, error) {
-	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", sysUserRows, m.table)
+	tpfKnowledgeSysUserIdKey := fmt.Sprintf("%s%v", cacheTpfKnowledgeSysUserIdPrefix, id)
 	var resp SysUser
-	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
+	err := m.QueryRowCtx(ctx, &resp, tpfKnowledgeSysUserIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", sysUserRows, m.table)
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
 	switch err {
 	case nil:
 		return &resp, nil
@@ -74,13 +81,28 @@ func (m *defaultSysUserModel) FindOne(ctx context.Context, id int64) (*SysUser, 
 }
 
 func (m *defaultSysUserModel) Update(ctx context.Context, data *SysUser) error {
-	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, sysUserRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.Username, data.RealName, data.Password, data.OrgName, data.OrgId, data.LockFlag, data.CreatedAt, data.UpdatedAt, data.DeletedAt, data.Id)
+	tpfKnowledgeSysUserIdKey := fmt.Sprintf("%s%v", cacheTpfKnowledgeSysUserIdPrefix, data.Id)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, sysUserRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, data.Username, data.RealName, data.Password, data.OrgName, data.OrgId, data.LockFlag, data.CreatedAt, data.UpdatedAt, data.DeletedAt, data.Id)
+	}, tpfKnowledgeSysUserIdKey)
 	return err
 }
 
 func (m *defaultSysUserModel) Delete(ctx context.Context, id int64) error {
-	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
-	_, err := m.conn.ExecCtx(ctx, query, id)
+	tpfKnowledgeSysUserIdKey := fmt.Sprintf("%s%v", cacheTpfKnowledgeSysUserIdPrefix, id)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
+		return conn.ExecCtx(ctx, query, id)
+	}, tpfKnowledgeSysUserIdKey)
 	return err
+}
+
+func (m *defaultSysUserModel) formatPrimary(primary interface{}) string {
+	return fmt.Sprintf("%s%v", cacheTpfKnowledgeSysUserIdPrefix, primary)
+}
+
+func (m *defaultSysUserModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", sysUserRows, m.table)
+	return conn.QueryRowCtx(ctx, v, query, primary)
 }
