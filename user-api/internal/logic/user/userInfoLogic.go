@@ -26,7 +26,7 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 }
 
 func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx, 1)
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, req.UserId)
 	if err != nil && err != model.ErrNotFound {
 		return nil, errors.New("查询数据失效！")
 	}
