@@ -1,13 +1,13 @@
 package user
 
 import (
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/logic/user"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/response"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/svc"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"go-zero-demo-single/user-api/internal/logic/user"
-	"go-zero-demo-single/user-api/internal/svc"
-	"go-zero-demo-single/user-api/internal/types"
-	"go-zero-demo-single/user-api/response"
 )
 
 func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

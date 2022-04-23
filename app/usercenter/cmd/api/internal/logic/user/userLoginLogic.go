@@ -3,10 +3,9 @@ package user
 import (
 	"context"
 	"github.com/golang-jwt/jwt/v4"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/svc"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/types"
 	"time"
-
-	"go-zero-demo-single/user-api/internal/svc"
-	"go-zero-demo-single/user-api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

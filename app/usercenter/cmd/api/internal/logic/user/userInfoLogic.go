@@ -3,12 +3,10 @@ package user
 import (
 	"context"
 	"errors"
-	"go-zero-demo-single/user-api/model"
-
-	"go-zero-demo-single/user-api/internal/svc"
-	"go-zero-demo-single/user-api/internal/types"
-
 	"github.com/zeromicro/go-zero/core/logx"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/svc"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/types"
+	"go-zero-demo-single/app/usercenter/model"
 )
 
 type UserInfoLogic struct {

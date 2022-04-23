@@ -3,16 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-
-	"go-zero-demo-single/user-api/internal/config"
-	"go-zero-demo-single/user-api/internal/handler"
-	"go-zero-demo-single/user-api/internal/svc"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/config"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/handler"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/svc"
 )
 
-var configFile = flag.String("f", "/home/zzx/go-proj/GOPATH/src/go-zero-demo-single/user-api/etc/user-api.yaml", "the config file")
+var configFile = flag.String("f", "/home/zzx/go-proj/GOPATH/src/go-zero-demo-single/app/usercenter/cmd/api/etc/usercenter.yaml", "the config file")
 
 func main() {
 	flag.Parse()

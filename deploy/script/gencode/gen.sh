@@ -1,5 +1,5 @@
-# 生成api业务代码 ， 进入"服务/cmd/api/desc"目录下，执行下面命令
-# goctl api go -api *.api -dir ../  --style=goZero
+# 生成api业务代码 ， 进入"服务/cmd/desc/desc"目录下，执行下面命令
+# goctl desc go -desc *.desc -dir ../  --style=goZero
 
 # 生成rpc业务代码
 # 【注】 需要安装下面3个插件
