@@ -29,7 +29,7 @@ func (l *UserLoginLogic) UserLogin(req *types.UserLoginReq) (resp *types.UserLog
 	l.Logger.Infof("登录入参是：", req)
 	accessToken, err := l.buildToken(l.svcCtx.Config.JwtAuth.AccessSecret, map[string]interface{}{
 		"key": "value",
-	}, 60*5)
+	}, l.svcCtx.Config.JwtAuth.AccessExpire*60)
 	return &types.UserLoginResp{
 		UserId:      10,
 		Nickname:    "zhangsan",
