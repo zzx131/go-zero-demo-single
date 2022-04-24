@@ -10,8 +10,9 @@ info(
 type (
 	// 登录接口入参和返回参数
 	UserLoginReq {
-		UserName string `json:"userName"`
-		Password string `json:"password"`
+		UserName string      `json:"userName"`
+		Password string      `json:"password"`
+		Data     map[string]interface{} `json:"data,omitempty,optional"`
 	}
 	UserLoginResp {
 		UserId      int64  `json:"userId"`
@@ -33,7 +34,7 @@ type (
 	jwt: JwtAuth
 	group: user
 )
-service user-api{
+service usercenter{
 	@doc "获取用户信息"
 	@handler userInfo
 	post /user/info (UserInfoReq) returns (UserInfoResp)
@@ -42,7 +43,7 @@ service user-api{
 @server(
 	group: user
 )
-service user-api{
+service usercenter{
 	@doc "用户登录"
 	@handler userLogin
 	post /user/login (UserLoginReq) returns (UserLoginResp)

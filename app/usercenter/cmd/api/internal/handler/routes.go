@@ -2,9 +2,10 @@
 package handler
 
 import (
-	"go-zero-demo-single/app/usercenter/cmd/api/internal/handler/user"
-	"go-zero-demo-single/app/usercenter/cmd/api/internal/svc"
 	"net/http"
+
+	user "go-zero-demo-single/app/usercenter/cmd/api/internal/handler/user"
+	"go-zero-demo-single/app/usercenter/cmd/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

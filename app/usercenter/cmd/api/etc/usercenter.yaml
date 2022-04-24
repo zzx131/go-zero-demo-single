@@ -9,7 +9,6 @@ JwtAuth:
 # log
 Log:
   Encoding: plain
-  Level: error
 
 #db
 DB:
