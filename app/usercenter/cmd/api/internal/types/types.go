@@ -2,9 +2,9 @@
 package types
 
 type UserLoginReq struct {
-	UserName string      `json:"userName"`
-	Password string      `json:"password"`
-	Data     interface{} `json:"data,omitempty,optional"`
+	UserName string                 `json:"userName"`
+	Password string                 `json:"password"`
+	Data     map[string]interface{} `json:"data,omitempty,optional"`
 }
 
 type UserLoginResp struct {
@@ -14,7 +14,7 @@ type UserLoginResp struct {
 }
 
 type UserInfoReq struct {
-	UserId   int64  `json:"userId"`
+	UserId   int64  `path:"userId"`
 	UserName string `json:"userName,optional"`
 }
 
