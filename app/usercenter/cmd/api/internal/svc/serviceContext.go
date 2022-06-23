@@ -13,6 +13,9 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.DB.DataSource)
+	db, _ := sqlConn.RawDB()
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(20)
 
 	return &ServiceContext{
 		Config:    c,
