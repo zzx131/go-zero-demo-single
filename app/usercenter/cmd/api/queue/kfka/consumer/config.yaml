@@ -1,0 +1,9 @@
+Name: kq
+Brokers:
+  - 192.168.10.146:20123
+  - 192.168.10.146:20124
+  - 192.168.10.146:20125
+Group: adhoc
+Topic: kq
+Offset: first
+Consumers: 1
