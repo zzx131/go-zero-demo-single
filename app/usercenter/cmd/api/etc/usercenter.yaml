@@ -8,7 +8,8 @@ JwtAuth:
 
 # log
 Log:
-  Encoding: plain
+  Encoding: json
+  Mode: file
 
 #db
 DB:
