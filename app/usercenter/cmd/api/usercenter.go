@@ -23,6 +23,7 @@ func main() {
 	defer server.Stop()
 
 	handler.RegisterHandlers(server, ctx)
+	server.PrintRoutes()
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
