@@ -48,7 +48,8 @@ type User struct {
 
 // 收集id转成切片
 func TestListStream_Map(t *testing.T) {
-	userList := make([]interface{}, 10)
+	// userList := make([]interface{}, 0)
+	var userList []interface{}
 
 	var userIdList []int
 
